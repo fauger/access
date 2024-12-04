@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>onglet</title>
+		<link rel="stylesheet" href="styles.css">
+	</head>
+	<body>
+		<header role="banner">
+			<nav role="navigation">
+				<img src="logo.webp" alt="" />
+				<ul>
+					<li><a href="">A Propos</a></li>
+					<li><a href="">Contact</a></li>
+					<li><a href="">Mes trains préférés</a></li>
+					<li><a href="" class="current">Accueil</a></li>
+				</ul>
+			</nav>
+		</header>
+		<main role="main">
+			<div class="container">
+				<h1>Ma train-o-thèque</h1>
+				<img src="assets/illustration.webp" alt="Une jolie bibliothèque avec une maquette de train au premier plan" />
+				<div>
+					<label>Votre recherche d'un train</label>
+					<input type="text" id="search"  />
+					<button tabindex="-1" onclick="filterTrains()">Ok</button>
+				</div>
+			</div>
+			<div id="trainlist" class="trainlist"></div>
+		</main>
+
+		<script src="./assets/data.js"></script>
+
+		<script>
+			function displayData(entryData) {
+					const output = document.getElementById('trainlist');
+					while (output.firstChild) {
+						output.removeChild(output.firstChild);
+					}
+					let totalTrains = document.getElementById("totalTrains");
+					if (totalTrains) {
+						totalTrains.querySelector("strong").innerHTML = entryData.length;
+					}
+					else {
+						output.insertAdjacentHTML("beforebegin", '<p id="totalTrains" class="heading"><strong>' + entryData.length + '</strong> trains trouvés</p>');
+					}
+					entryData.map((train)=> {
+						let newDiv = document.createElement("div");
+						newDiv.className = "train";
+						newDiv.innerHTML = `
+							<h3>${train.name}</h3>
+							<p></p>    									
+							<img src=${train.url} /> 
+							<p>${train.details}</p>
+							<button onclick="prompt(this.getAttribute('aria-label'));" aria-label="donner une note au train">Noter le train</button>`;
+							output.appendChild(newDiv);
+					})
+			}
+			displayData(data);
+
+			function filterTrains() {
+				const inputValue = document.getElementById("search").value
+				const filteredData = data.filter((train) => train.name.toLowerCase().includes(inputValue.toLowerCase()))
+				displayData(filteredData);
+			}
+		</script>
+
+		<footer role="contentinfo">
+			<span lang="it">Copyright 2024</span>
+			<span id="button" class="credit-button" onclick="toggleCredits()">Afficher +</span>
+			<p id="credits" class="hide">Site réalisé par SNCF Connect pour l'école EFREI</p>
+		</footer>
+
+		<script>
+			function toggleCredits(){
+				const credits = document.getElementById("credits")
+				const button = document.getElementById("button")
+				credits.classList.toggle('hide');
+			}
+		</script>
+
+	</body>
+</html>
